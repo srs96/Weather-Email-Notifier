@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Simple Weather</title>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4qnMZiYXA0t4SaVdve2ohcjvdmIyL4TQ&libraries=places"></script>
+  </head>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <script>
+      var messages = {{ messages | safe }};
+      for (var i=0; i<messages.length; i++) {
+        alert(messages[i]);
+      }
+    </script>
+  {% endif %}
+{% endwith %}
+  <body>
+    <form action="" method="post">
+      <div class="form-group">
+        <label for="exampleFormControlInput1">Email Address</label>
+        <input type="email" class="form-control" id="exampleFormControlInput1" name="email" placeholder="name@example.com" required>
+      </div>
+    <div class="form-group">
+        <label for="inputCity">City</label>
+        <input type="text" class="form-control" id="city" name = "city" placeholder="New York, NY, USA" required>
+     </div>
+      <div class="form-group">
+        <label for="exampleFormControlSelect2">Time to receive daily weather update</label>
+        <select class="form-control" name="time" id="exampleFormControlSelect2">
+            <option selected="selected" value="0" >12AM</option>
+            <option  value="1">1AM</option>
+            <option value="2">2AM</option>
+            <option value="3">3AM</option>
+            <option value="4">4AM</option>
+            <option value="5">5AM</option>
+            <option value="6">6AM</option>
+            <option value="7">7AM</option>
+            <option value="8">8AM</option>
+            <option value="9">9AM</option>
+            <option value="10">10AM</option>
+            <option value="11">11AM</option>
+            <option value="12">12PM</option>
+            <option value="13">1PM</option>
+            <option value="14">2PM</option>
+            <option value="15">3PM</option>
+            <option value="16">4PM</option>
+            <option value="17">5PM</option>
+            <option value="18">6PM</option>
+            <option value="19">7PM</option>
+            <option value="20">8PM</option>
+            <option value="21">9PM</option>
+            <option value="22">10PM</option>
+            <option value="23">11PM</option>
+        </select>
+      </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" id="customRadio1" name="temp_options" value="c" class="custom-control-input" checked="checked">
+          <label class="custom-control-label" for="customRadio1">Celsius</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" id="customRadio2" name="temp_options"  value="f" class="custom-control-input">
+          <label class="custom-control-label" for="customRadio2">Fahrenheit</label>
+        </div>
+        <br>
+  <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+      <label class="form-check-label" for="invalidCheck2">
+        Agree to <a href= {{ url_for('terms') }} >Terms and Conditions </a> and <a href= {{ url_for('privacy') }} >Privacy Policy </a>
+      </label>
+    </div>
+        <br>
+      <button class="btn btn-primary" id="btnsubmit" type="submit">Sign Up</button>
+
+<br>
+<br>
+<br>
+<div class="accordion" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          How do I unsubscribe?
+        </button>
+      </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        <a  href={{ url_for('unsub')}} >Click here to unsubscribe</a>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+      <h2 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          How do I update my preferences?
+        </button>
+      </h2>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+        Refill the form with your new choices and submit. Choices will automatically update.
+     </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingThree">
+      <h2 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Contact Info
+        </button>
+      </h2>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      <div class="card-body">
+        simple.weather.host@gmail.com
+      </div>
+    </div>
+  </div>
+</div>
+    </form>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+
+<script>
+    var IsplaceChange = false;
+    $(document).ready(function () {
+        var input = document.getElementById('city');
+        var autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            var place = autocomplete.getPlace();
+
+            IsplaceChange = true;
+        });
+
+        $("#city").keydown(function () {
+            IsplaceChange = false;
+        });
+
+        $("#btnsubmit").click(function () {
+
+            if (IsplaceChange == false) {
+                $("#city").val('');
+                alert("Please choose a valid location.");
+            }
+
+        });
+    });
+  </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
