@@ -38,8 +38,8 @@ def index():
         temp_units = request.form['temp_options']
         mail_time = convert_time(city, int(mail_time))
         mail_time = mail_time.split(':')
-        mail_hour = mail_time[0]
-        mail_minute = mail_time[1]
+        mail_hour = int(mail_time[0])
+        mail_minute = int(mail_time[1])
         exists = User.query.filter(User.email == email).first()
         if not exists:
             u = User(email=email, city=city, units=temp_units, mail_hour = mail_hour, mail_minute=mail_minute)
