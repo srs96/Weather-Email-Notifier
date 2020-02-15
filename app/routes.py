@@ -21,13 +21,14 @@ def scheduled_task():
     #users = User.query.filter(User.mail_hour==current_hour).all()
     users = User.query.filter(User.mail_hour==current_hour, User.mail_minute==current_minute).all()
     for idx, user in enumerate(users):
-        with app.test_request_context():
-            send_email('Today\'s Weather', app.config['ADMINS'][0], user, url_for('unsub', _external=True))
+        with app.app_context():
+            send_email('Today\'s Weather', app.config['ADMINS'][0], user)
         print(idx)
 
 
 app.apscheduler.add_job(func=scheduled_task, trigger='cron', minute='0, 15, 30, 45', id = str(1))
 #app.apscheduler.add_job(func=scheduled_task, trigger='cron', second='*', id = str(1))
+#app.apscheduler.add_job(func=scheduled_task, trigger='cron', second='0, 10, 20, 30, 40, 50', id = str(1))
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
