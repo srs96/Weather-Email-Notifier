@@ -1,29 +1,32 @@
 import requests, json
-
-def get_data(city):
+from geopy.geocoders import Nominatim
+def get_data(lat, lng):
     # Enter your API key here
+
+    #geolocator = Nominatim(timeout=10)
+    #location = geolocator.geocode(city)
+    #lat = location.latitude
+    #lng = location.longitude
     api_key = "1e6085be3b08db43aad057a2397c1ad4"
 
     # base_url variable to store url
-    base_url = "http://api.openweathermap.org/data/2.5/weather?"
+    base_url = "http://api.openweathermap.org/data/2.5/weather?" +"lat=" +str(lat)+ "&lon=" +str(lng) + "&appid=" + api_key
 
-    # Give city name
-    #city_name = input("Enter city name : ")
 
-    #lat =
-    #lon =
-    city = city.lower()
-    city = city.strip(',')
-    city = [x.strip() for x in city]
-    city = ''.join(e for e in city)
-    city_name = city
+    #api.openweathermap.org/data/2.5/weather?lat=35&lon=139
+
+    #city = city.lower()
+    #city = city.strip(',')
+    #city = [x.strip() for x in city]
+    #city = ''.join(e for e in city)
+    #city_name = city
     # complete_url variable to store
     # complete url address
-    complete_url = base_url + "appid=" + api_key + "&q=" + city_name
+    #complete_url = base_url + "appid=" + api_key + "&q=" + city_name
 
     # get method of requests module
     # return response object
-    response = requests.get(complete_url)
+    response = requests.get(base_url)
 
     # json method of response object
     # convert json format data into

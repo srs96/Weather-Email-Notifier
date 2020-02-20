@@ -7,7 +7,7 @@ from app import db
 import datetime
 from app.email import send_email
 from app.time_convert import convert_time
-
+from app.geocode import lookup
 
 
 def scheduled_task():
@@ -18,11 +18,11 @@ def scheduled_task():
     for i in all_u:
         print(i)
     #users = User.query.all()
-    #users = User.query.filter(User.mail_hour==current_hour).all()
     users = User.query.filter(User.mail_hour==current_hour, User.mail_minute==current_minute).all()
     for idx, user in enumerate(users):
         with app.app_context():
             send_email('Today\'s Weather', app.config['ADMINS'][0], user)
+        print(user)
         print(idx)
 
 
@@ -42,9 +42,10 @@ def index():
         mail_time = mail_time.split(':')
         mail_hour = int(mail_time[0])
         mail_minute = int(mail_time[1])
+        latitude, longitude = lookup(city)
         exists = User.query.filter(User.email == email).first()
         if not exists:
-            u = User(email=email, city=city, units=temp_units, mail_hour = mail_hour, mail_minute=mail_minute)
+            u = User(email=email, city=city, units=temp_units, mail_hour = mail_hour, mail_minute=mail_minute, latitude=latitude, longitude=longitude)
             db.session.add(u)
             db.session.commit()
             flash('You details were succesfully added.')
@@ -54,6 +55,8 @@ def index():
             exists.units = temp_units
             exists.mail_hour = mail_hour
             exists.mail_minute = mail_minute
+            exists.latitude = latitude
+            exists.longitude = longitude
             db.session.commit()
             flash('Your details were succesfully updated.')
     return render_template('index.html')

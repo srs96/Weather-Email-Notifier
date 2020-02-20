@@ -26,6 +26,8 @@ def send_async_email(app, msg):
 def send_email(subject, sender, user):
     recipients = user.email
     city = user.city
+    lat = user.latitude
+    lng = user.longitude
     units = user.units
     unit_symbol = ''
     if units == 'f':
@@ -33,8 +35,8 @@ def send_email(subject, sender, user):
     elif units == 'c':
         unit_symbol = '°C'
     msg = Message(subject, sender=sender, recipients=[recipients])
-    if get_data(city):
-        description, current_temperature, min_temperature, max_temperature, feels_like = get_data(city)
+    if get_data(lat, lng):
+        description, current_temperature, min_temperature, max_temperature, feels_like = get_data(lat, lng)
         current_temperature, min_temperature, max_temperature, feels_like = adj_temp(current_temperature, min_temperature, max_temperature, feels_like, units)
         text_body = (
             f'Hello, here\'s your weather update for today in {city}.\n'

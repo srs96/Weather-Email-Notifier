@@ -1,8 +1,8 @@
 """users table
 
-Revision ID: 27acc5800698
+Revision ID: 5ed21ed6e666
 Revises: 
-Create Date: 2020-02-13 18:37:01.561206
+Create Date: 2020-02-20 14:52:51.058494
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '27acc5800698'
+revision = '5ed21ed6e666'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,13 +22,17 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=True),
     sa.Column('city', sa.String(length=120), nullable=True),
+    sa.Column('latitude', sa.Float(), nullable=True),
+    sa.Column('longitude', sa.Float(), nullable=True),
     sa.Column('units', sa.String(length=1), nullable=True),
-    sa.Column('mail_hour', sa.String(length=2), nullable=True),
-    sa.Column('mail_minute', sa.String(length=2), nullable=True),
+    sa.Column('mail_hour', sa.Integer(), nullable=True),
+    sa.Column('mail_minute', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_user_city'), 'user', ['city'], unique=False)
     op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
+    op.create_index(op.f('ix_user_latitude'), 'user', ['latitude'], unique=False)
+    op.create_index(op.f('ix_user_longitude'), 'user', ['longitude'], unique=False)
     op.create_index(op.f('ix_user_mail_hour'), 'user', ['mail_hour'], unique=False)
     op.create_index(op.f('ix_user_mail_minute'), 'user', ['mail_minute'], unique=False)
     op.create_index(op.f('ix_user_units'), 'user', ['units'], unique=False)
@@ -40,6 +44,8 @@ def downgrade():
     op.drop_index(op.f('ix_user_units'), table_name='user')
     op.drop_index(op.f('ix_user_mail_minute'), table_name='user')
     op.drop_index(op.f('ix_user_mail_hour'), table_name='user')
+    op.drop_index(op.f('ix_user_longitude'), table_name='user')
+    op.drop_index(op.f('ix_user_latitude'), table_name='user')
     op.drop_index(op.f('ix_user_email'), table_name='user')
     op.drop_index(op.f('ix_user_city'), table_name='user')
     op.drop_table('user')
