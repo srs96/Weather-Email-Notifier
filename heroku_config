@@ -1,8 +1,12 @@
 heroku config:set FLASK_APP=weather.py
+heroku config:set FLASK_ENV=development
+heroku config:set SECRET_KEY=jkfshdfjna3203u1203jcdacu0sd8
 heroku config:set MAIL_SERVER=smtp.googlemail.com
 heroku config:set MAIL_PORT=587
 heroku config:set MAIL_USE_TLS=1
 heroku config:set MAIL_USERNAME=simple.weather.bot@gmail.com
 heroku config:set MAIL_PASSWORD=Exams123!
+heroku config:set GOOGLE_API_KEY = AIzaSyB4qnMZiYXA0t4SaVdve2ohcjvdmIyL4TQ
+heroku config:set OWM_API_KEY = 1e6085be3b08db43aad057a2397c1ad4
+heroku config:set HOSTED_URL = https://weather-96.herokuapp.com
 heroku config:set WEB_CONCURRENCY=1
-
