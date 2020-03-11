@@ -17,18 +17,17 @@ def scheduled_task():
     all_u = User.query.all()
     for i in all_u:
         print(i)
-    #users = User.query.all()
-    users = User.query.filter(User.mail_hour==current_hour, User.mail_minute==current_minute).all()
+    users = User.query.all()
+    #users = User.query.filter(User.mail_hour==current_hour, User.mail_minute==current_minute).all()
     for idx, user in enumerate(users):
         with app.app_context():
-            send_email('Today\'s Weather', app.config['ADMINS'][0], user)
+            send_email('Today\'s Weather', user)
         print(user)
         print(idx)
 
 
-app.apscheduler.add_job(func=scheduled_task, trigger='cron', minute='0, 15, 30, 45', id = str(1))
-#app.apscheduler.add_job(func=scheduled_task, trigger='cron', second='*', id = str(1))
-#app.apscheduler.add_job(func=scheduled_task, trigger='cron', second='0, 10, 20, 30, 40, 50', id = str(1))
+#app.apscheduler.add_job(func=scheduled_task, trigger='cron', minute='0, 15, 30, 45', id = str(1))
+app.apscheduler.add_job(func=scheduled_task, trigger='cron', second='0, 10, 20, 30, 40, 50', id = str(1))
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -38,11 +37,12 @@ def index():
         city = request.form['city']
         mail_time = request.form['time']
         temp_units = request.form['temp_options']
-        mail_time = convert_time(city, int(mail_time))
+        latitude, longitude = lookup(city, app.config['GOOGLE_API_KEY'])
+        mail_time = convert_time(latitude, longitude, int(mail_time))
         mail_time = mail_time.split(':')
         mail_hour = int(mail_time[0])
         mail_minute = int(mail_time[1])
-        latitude, longitude = lookup(city)
+
         exists = User.query.filter(User.email == email).first()
         if not exists:
             u = User(email=email, city=city, units=temp_units, mail_hour = mail_hour, mail_minute=mail_minute, latitude=latitude, longitude=longitude)

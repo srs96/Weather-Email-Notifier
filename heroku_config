@@ -1,0 +1,8 @@
+heroku config:set FLASK_APP=weather.py
+heroku config:set MAIL_SERVER=smtp.googlemail.com
+heroku config:set MAIL_PORT=587
+heroku config:set MAIL_USE_TLS=1
+heroku config:set MAIL_USERNAME=simple.weather.bot@gmail.com
+heroku config:set MAIL_PASSWORD=Exams123!
+heroku config:set WEB_CONCURRENCY=1
+

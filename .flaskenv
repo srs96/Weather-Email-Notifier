@@ -1,7 +1,11 @@
 FLASK_APP=weather.py
 FLASK_ENV=development
+export SECRET_KEY=jkfshdfjna3203u1203jcdacu0sd8
 export MAIL_SERVER=smtp.googlemail.com
 export MAIL_PORT=587
 export MAIL_USE_TLS=1
 export MAIL_USERNAME=simple.weather.bot@gmail.com
 export MAIL_PASSWORD=Exams123!
+export GOOGLE_API_KEY = AIzaSyB4qnMZiYXA0t4SaVdve2ohcjvdmIyL4TQ
+export OWM_API_KEY = 1e6085be3b08db43aad057a2397c1ad4
+export HOSTED_URL = https://weather-96.herokuapp.com

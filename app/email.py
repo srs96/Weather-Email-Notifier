@@ -23,7 +23,8 @@ def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
 
-def send_email(subject, sender, user):
+def send_email(subject, user):
+    sender = app.config['MAIL_USERNAME']
     recipients = user.email
     city = user.city
     lat = user.latitude
@@ -35,21 +36,23 @@ def send_email(subject, sender, user):
     elif units == 'c':
         unit_symbol = '°C'
     msg = Message(subject, sender=sender, recipients=[recipients])
-    if get_data(lat, lng):
-        description, current_temperature, min_temperature, max_temperature, feels_like = get_data(lat, lng)
+    if get_data(lat, lng, app.config['OWM_API_KEY']):
+        description, current_temperature, min_temperature, max_temperature, feels_like = get_data(lat, lng, app.config['OWM_API_KEY'])
         current_temperature, min_temperature, max_temperature, feels_like = adj_temp(current_temperature, min_temperature, max_temperature, feels_like, units)
+        unsub_url = app.config['HOSTED_URL'] + '/unsub'
+        print(unsub_url)
         text_body = (
             f'Hello, here\'s your weather update for today in {city}.\n'
             f'Weather Overview - {description.capitalize()}.\n'
             f'The current temperature is {current_temperature}{unit_symbol} and it feels like {feels_like}{unit_symbol}.\n'
             f'The maximum temperautre for today is {max_temperature}{unit_symbol}.\n'
             f'The minimum temperautre for today is {min_temperature}{unit_symbol}.\n\n\n\n'
-            f' Go here to unsubscribe - https://calm-fortress-35099.herokuapp.com/unsub'
+            f' Go here to unsubscribe - {unsub_url}'
             )
 
         msg.body = text_body
         msg.html = render_template('email.html', city=city, min_temperature=min_temperature, current_temperature=current_temperature, feels_like=feels_like,
-                                            max_temperature=max_temperature, unit_symbol=unit_symbol, description=description.capitalize())
+                                            max_temperature=max_temperature, unit_symbol=unit_symbol, description=description.capitalize(), unsub_url=unsub_url)
         send_async_email(app, msg)
 
 

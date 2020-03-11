@@ -1,11 +1,7 @@
 import requests
 
 
-api_key = 'AIzaSyB4qnMZiYXA0t4SaVdve2ohcjvdmIyL4TQ'
-
-
-
-def lookup(city):
+def lookup(city, api_key):
     url = 'https://maps.googleapis.com/maps/api/geocode/json?address='  + city + '&key=' + api_key
     response = requests.get(url)
 

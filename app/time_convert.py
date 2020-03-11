@@ -4,11 +4,11 @@ import datetime, pytz
 import time
 from datetime import timedelta
 
-def convert_time(city, mail_time):
-    geolocator = Nominatim(timeout=10)
-    location = geolocator.geocode(city)
-    lat = location.latitude
-    lng = location.longitude
+def convert_time(lat, lng, mail_time):
+    #geolocator = Nominatim(timeout=10)
+    #location = geolocator.geocode(city)
+    #lat = location.latitude
+    #lng = location.longitude
     tf = TimezoneFinder()
     tmz = tf.timezone_at(lng=lng, lat=lat)
     city_offset = datetime.datetime.now(pytz.timezone(tmz)).strftime('%z')
