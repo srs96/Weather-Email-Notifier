@@ -1,7 +1,7 @@
 from app import app
 from app.forms import DetailsForm
 from flask import render_template, request, redirect, url_for, flash
-from app.models import User
+from app.models import Users
 from app.forms import DetailsForm
 from app import db
 import datetime
@@ -14,12 +14,12 @@ def scheduled_task():
     current_hour = datetime.datetime.now().hour
     current_minute = datetime.datetime.now().minute
     print('Time is', current_hour, current_minute)
-    all_u = User.query.all()
+    all_u = Users.query.all()
     for idx, i in enumerate(all_u):
         print(i, 'just checking database', idx)
     #Test below
-    #users = User.query.all()
-    users = User.query.filter(User.mail_hour==current_hour, User.mail_minute==current_minute).all()
+    #users = Users.query.all()
+    users = Users.query.filter(Users.mail_hour==current_hour, Users.mail_minute==current_minute).all()
     for idx, user in enumerate(users):
         with app.app_context():
             send_email('Today\'s Weather', user)
@@ -45,9 +45,9 @@ def index():
         mail_hour = int(mail_time[0])
         mail_minute = int(mail_time[1])
 
-        exists = User.query.filter(User.email == email).first()
+        exists = Users.query.filter(Users.email == email).first()
         if not exists:
-            u = User(email=email, city=city, units=temp_units, mail_hour = mail_hour, mail_minute=mail_minute, latitude=latitude, longitude=longitude)
+            u = Users(email=email, city=city, units=temp_units, mail_hour = mail_hour, mail_minute=mail_minute, latitude=latitude, longitude=longitude)
             db.session.add(u)
             db.session.commit()
             flash('You details were succesfully added.')
@@ -79,7 +79,7 @@ def privacy():
 def unsub():
     if request.method == 'POST':
         email = request.form['email']
-        User.query.filter(User.email==email).delete()
+        Users.query.filter(Users.email==email).delete()
         db.session.commit()
         flash('Your details, if stored, were succesfully deleted.')
     return render_template('unsub.html')
