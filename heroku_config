@@ -8,5 +8,6 @@ heroku config:set MAIL_USERNAME=simple.weather.bot@gmail.com
 heroku config:set MAIL_PASSWORD=Exams123!
 heroku config:set GOOGLE_API_KEY = AIzaSyB4qnMZiYXA0t4SaVdve2ohcjvdmIyL4TQ
 heroku config:set OWM_API_KEY = 1e6085be3b08db43aad057a2397c1ad4
+heroku config:set DARK_SKY_KEY = 5c88864a5aebd735dfa3c603db389e02
 heroku config:set HOSTED_URL = https://weather-96.herokuapp.com
 heroku config:set WEB_CONCURRENCY=1

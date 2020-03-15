@@ -15,12 +15,10 @@ def scheduled_task():
     current_minute = datetime.datetime.now().minute
     print('Time is', current_hour, current_minute)
     all_u = User.query.all()
-    for i in all_u:
-        print(i)
-    users = User.query.all()
-    for idx, user in enumerate(users):
-        print(user)
-        print(idx)
+    for idx, i in enumerate(all_u):
+        print(i, 'just checking database', idx)
+    #Test below
+    #users = User.query.all()
     users = User.query.filter(User.mail_hour==current_hour, User.mail_minute==current_minute).all()
     for idx, user in enumerate(users):
         with app.app_context():
@@ -30,6 +28,7 @@ def scheduled_task():
 
 
 app.apscheduler.add_job(func=scheduled_task, trigger='cron', minute='0, 15, 30, 45', id = str(1))
+#Test below
 #app.apscheduler.add_job(func=scheduled_task, trigger='cron', second='0, 10, 20, 30, 40, 50', id = str(1))
 
 @app.route('/', methods=['GET', 'POST'])

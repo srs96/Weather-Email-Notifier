@@ -7,10 +7,6 @@ from flask import url_for, render_template
 from .decorators import async
 
 def adj_temp(current_temperature, min_temperature, max_temperature, feels_like, units):
-    current_temperature -= 273
-    min_temperature -= 273
-    max_temperature -= 273
-    feels_like -= 273
     if units == 'f':
         current_temperature =  (current_temperature * 9/5) + 32
         min_temperature = (min_temperature * 9/5) + 32
@@ -36,23 +32,26 @@ def send_email(subject, user):
     elif units == 'c':
         unit_symbol = '°C'
     msg = Message(subject, sender=sender, recipients=[recipients])
-    if get_data(lat, lng, app.config['OWM_API_KEY']):
-        description, current_temperature, min_temperature, max_temperature, feels_like = get_data(lat, lng, app.config['OWM_API_KEY'])
-        current_temperature, min_temperature, max_temperature, feels_like = adj_temp(current_temperature, min_temperature, max_temperature, feels_like, units)
-        unsub_url = app.config['HOSTED_URL'] + '/unsub'
-        print(unsub_url)
-        text_body = (
-            f'Hello, here\'s your weather update for today in {city}.\n'
-            f'Weather Overview - {description.capitalize()}.\n'
-            f'The current temperature is {current_temperature}{unit_symbol} and it feels like {feels_like}{unit_symbol}.\n'
-            f'The maximum temperautre for today is {max_temperature}{unit_symbol}.\n'
-            f'The minimum temperautre for today is {min_temperature}{unit_symbol}.\n\n\n\n'
-            f' Go here to unsubscribe - {unsub_url}'
-            )
+    description_current, description_day, current_temperature, feels_like, min_temperature, max_temperature, humidity = get_data(lat, lng, app.config['DARK_SKY_KEY'])
+    current_temperature, min_temperature, max_temperature, feels_like = adj_temp(current_temperature, min_temperature, max_temperature, feels_like, units)
+    unsub_url = app.config['HOSTED_URL'] + '/unsub'
+    darksky_url = 'https://darksky.net/poweredby/'
+    text_body = (
+        f'Hello, here\'s your weather update for today in {city}.\n'
+        f'Current Weather Description- {description_current.capitalize()}.\n'
+        f'Today\'s Weather Overview - {description_day.capitalize()}.\n'
+        f'The current temperature is {current_temperature}{unit_symbol} and it feels like {feels_like}{unit_symbol}.\n'
+        f'The maximum temperautre for today is {max_temperature}{unit_symbol}.\n'
+        f'The minimum temperautre for today is {min_temperature}{unit_symbol}.\n'
+        f'The humidity for today is {humidity}.\n\n\n\n'
+        f' Powered by Dark Sky - {darksky_url}'
+        f' Go here to unsubscribe - {unsub_url}'
+        )
 
-        msg.body = text_body
-        msg.html = render_template('email.html', city=city, min_temperature=min_temperature, current_temperature=current_temperature, feels_like=feels_like,
-                                            max_temperature=max_temperature, unit_symbol=unit_symbol, description=description.capitalize(), unsub_url=unsub_url)
-        send_async_email(app, msg)
+    msg.body = text_body
+    msg.html = render_template('email.html', city=city, min_temperature=min_temperature, current_temperature=current_temperature, feels_like=feels_like,
+                                        max_temperature=max_temperature, unit_symbol=unit_symbol, description_current=description_current.capitalize(),
+                                        description_day=description_day.capitalize(), unsub_url=unsub_url, darksky_url=darksky_url, humidity=humidity)
+    send_async_email(app, msg)
 
 
