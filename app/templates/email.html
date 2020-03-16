@@ -2,11 +2,14 @@
 <html lang="en">
 <body>
 <p>
-Hello, here's your weather update for today in {{ city }}.<br>
-Weather Overview - {{ description }}.<br>
+Hello, here's your weather update for today in {{ city }}.<br><br>
+Current Weather Description - {{ description_current }}.<br>
+Today's Weather Overview - {{ description_day }}<br>
 The current temperature is {{ current_temperature }}{{ unit_symbol }} and it feels like {{ feels_like }}{{ unit_symbol }}<br>
 The maximum temperature for today is {{ max_temperature }}{{ unit_symbol }}<br>
-The minimum temperature for today is {{ min_temperature }}{{ unit_symbol }}.<br><br><br>
+The minimum temperature for today is {{ min_temperature }}{{ unit_symbol }}.<br>
+The humidity today is {{ humidity }}%.<br><br>
+<a  href={{ darksky_url }} >Powered by Dark Sky</a><br><br><br>
 </p>
 <a  href={{ unsub_url }} >Click here to unsubscribe</a>
 </body>
