@@ -4,7 +4,7 @@ from app import mail
 from app.pull_data import get_data
 from threading import Thread
 from flask import url_for, render_template
-from .decorators import async
+from .decorators import async_func
 
 def adj_temp(current_temperature, min_temperature, max_temperature, feels_like, units):
     if units == 'f':
@@ -14,8 +14,8 @@ def adj_temp(current_temperature, min_temperature, max_temperature, feels_like, 
         feels_like = (feels_like * 9/5) + 32
     return [round(x,1) for x in [current_temperature, min_temperature, max_temperature, feels_like]]
 
-@async
-def send_async_email(app, msg):
+@async_func
+def send_async_func_email(app, msg):
     with app.app_context():
         mail.send(msg)
 
@@ -52,6 +52,6 @@ def send_email(subject, user):
     msg.html = render_template('email.html', city=city, min_temperature=min_temperature, current_temperature=current_temperature, feels_like=feels_like,
                                         max_temperature=max_temperature, unit_symbol=unit_symbol, description_current=description_current.capitalize(),
                                         description_day=description_day.capitalize(), unsub_url=unsub_url, darksky_url=darksky_url, humidity=humidity)
-    send_async_email(app, msg)
+    send_async_func_email(app, msg)
 
 

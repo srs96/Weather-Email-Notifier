@@ -10,4 +10,4 @@ export GOOGLE_API_KEY = AIzaSyB4qnMZiYXA0t4SaVdve2ohcjvdmIyL4TQ
 export OWM_API_KEY = 1e6085be3b08db43aad057a2397c1ad4
 export HOSTED_URL = https://weather-96.herokuapp.com
 export DARK_SKY_KEY = 5c88864a5aebd735dfa3c603db389e02
-export DATABASE_URL=postgres://fvtpvxxrwhkozr:768432bebac2fbf87be9319c2a4d449b38f6a65bd957e6cb8275e993e1296506@ec2-35-168-54-239.compute-1.amazonaws.com:5432/da86jq2g0r8046
+export DATABASE_URL=postgresql://fvtpvxxrwhkozr:768432bebac2fbf87be9319c2a4d449b38f6a65bd957e6cb8275e993e1296506@ec2-35-168-54-239.compute-1.amazonaws.com:5432/da86jq2g0r8046
