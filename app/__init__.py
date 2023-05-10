@@ -9,9 +9,10 @@ import os
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
-db.create_all()
 migrate = Migrate(app, db)
 mail = Mail(app)
+with app.app_context():
+    db.create_all()
 
 if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == "true":
     scheduler = APScheduler()
