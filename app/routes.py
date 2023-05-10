@@ -11,26 +11,26 @@ from app.geocode import lookup
 
 
 def scheduled_task():
-    current_hour = datetime.datetime.now().hour
-    current_minute = datetime.datetime.now().minute
-    print('Time is', current_hour, current_minute)
-    all_u = Users.query.all()
-    for idx, i in enumerate(all_u):
-        print(i, 'just checking database', idx)
-    #Test below
-    #users = Users.query.all()
-    users = Users.query.filter(Users.mail_hour==current_hour, Users.mail_minute==current_minute).all()
-    for idx, user in enumerate(users):
-        with app.app_context():
-            send_email('Today\'s Weather', user)
-        print(user)
-        print(idx)
+    with app.app_context():
+        current_hour = datetime.datetime.now().hour
+        current_minute = datetime.datetime.now().minute
+        print('Time is', current_hour, current_minute)
+        all_u = Users.query.all()
+        for idx, i in enumerate(all_u):
+            print(i, 'just checking database', idx)
+        #Test below
+        #users = Users.query.all()
+        users = Users.query.filter(Users.mail_hour==current_hour, Users.mail_minute==current_minute).all()
+        for idx, user in enumerate(users):
+            with app.app_context():
+                send_email('Today\'s Weather', user)
+            print(user)
+            print(idx)
 
 
-#app.apscheduler.add_job(func=scheduled_task, trigger='cron', minute='0, 15, 30, 45', id = str(1))
+app.apscheduler.add_job(func=scheduled_task, trigger='cron', minute='0, 15, 30, 45', id = str(1))
 #Test below
-#with app.app_context():
-#    app.apscheduler.add_job(func=scheduled_task, trigger='cron', second='0, 10, 20, 30, 40, 50', id = str(1))
+#app.apscheduler.add_job(func=scheduled_task, trigger='cron', second='0, 10, 20, 30, 40, 50', id = str(1))
 
 
 @app.route('/', methods=['GET', 'POST'])
