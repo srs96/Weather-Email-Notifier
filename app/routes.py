@@ -15,9 +15,9 @@ def scheduled_task():
         current_hour = datetime.datetime.now().hour
         current_minute = datetime.datetime.now().minute
         print('Time is', current_hour, current_minute)
-        all_u = Users.query.all()
-        for idx, i in enumerate(all_u):
-            print(i, 'just checking database', idx)
+        #all_u = Users.query.all()
+        #for idx, i in enumerate(all_u):
+        #    print(i, 'just checking database', idx)
         #Test below
         #users = Users.query.all()
         users = Users.query.filter(Users.mail_hour==current_hour, Users.mail_minute==current_minute).all()
