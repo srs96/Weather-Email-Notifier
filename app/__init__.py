@@ -8,10 +8,11 @@ import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+
 mail = Mail(app)
 with app.app_context():
+    db = SQLAlchemy(app)
+    migrate = Migrate(app, db)
     db.create_all()
 
 if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == "true":
