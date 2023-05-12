@@ -12,6 +12,8 @@ import requests
 
 def scheduled_task():
     with app.app_context():
+        r = requests.get(url = 'https://simple-weather-7bta.onrender.com/')
+        print(r.json())
         current_hour = datetime.datetime.now().hour
         current_minute = datetime.datetime.now().minute
         print('Time is', current_hour, current_minute)
@@ -27,17 +29,8 @@ def scheduled_task():
             print(user)
             print(idx)
 
-def request_task():
-    with app.app_context():
-        r = requests.get(url = 'https://simple-weather-7bta.onrender.com/')
-        print(r.json())
 
-
-
-app.apscheduler.add_job(func=scheduled_task, trigger='cron', minute='0, 15, 30, 45', id = str(1))
-#Test below
-app.apscheduler.add_job(func=request_task, trigger='cron', minute='0, 10, 20, 30, 40, 50', id = str(1))
-
+app.apscheduler.add_job(func=scheduled_task, trigger='cron', minute='0, 10, 20, 30, 40, 50', id = str(1))
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
