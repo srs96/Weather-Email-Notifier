@@ -13,7 +13,7 @@ import requests
 def scheduled_task():
     with app.app_context():
         r = requests.get(url = 'https://simple-weather-7bta.onrender.com/')
-        print(r.json())
+        print(r.status_code)
         current_hour = datetime.datetime.now().hour
         current_minute = datetime.datetime.now().minute
         print('Time is', current_hour, current_minute)
