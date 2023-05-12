@@ -30,7 +30,7 @@ def scheduled_task():
             print(idx)
 
 
-app.apscheduler.add_job(func=scheduled_task, trigger='cron', minute='0, 10, 20, 30, 40, 50', id = str(1))
+app.apscheduler.add_job(func=scheduled_task, trigger='cron', seconds='0', id = str(1))
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
